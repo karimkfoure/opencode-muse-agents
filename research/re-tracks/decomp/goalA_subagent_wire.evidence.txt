@@ -1,0 +1,37 @@
+# Goal A evidence: subagent sendMessage/readResult wire descriptors
+# Source: x86_linux-1.3.0-R3057.1.bin, .rodata blob + .data.rel.ro record groups @0x121b02a8/0x121b0260
+# Record schema (decoded from file): {u64 zero,u64 zero, Slice name, Slice result, Slice doc, Slice params}, Slice=(ptr,len), 0xfffffffffffffffe-terminated
+
+## sendMessage record (group2 @0x121b02a0): name=subagent/sendMessage result=CommandAcceptedResult params=SubagentInputParams
+subagent/sendMessageCommandAcceptedResultQueue a user note into a running child; admission-only ack, the note settles on the child session's view stream (SS3.16).SubagentInputParams
+
+## readResult record (group9 @~0x121b0358): name=subagent/readResult result=CommandAcceptedResult params=SubagentTargetParams
+subagent/readResultConsume a ready child result (state-changing; the content is already the subagent item's result field) (SS3.16).session/startSessionStartResultCreates a 
+
+## followupTask doc (shares SubagentInputParams):
+Queue a follow-up task for a child; admission-only ack, the task settles on the child session's view stream (SS3.16).
+
+## interrupt/stop/close share SubagentOwnerReasonParams; resume/reopen/readResult share SubagentTargetParams
+## interrupt doc:
+Ask a child to yield at its next boundary; outcome folds to the parent's subagent item (SS3.16, SS4.5.7).
+## close doc:
+Owner-close a child; the terminal mapping folds per SS4.5.7 (SS3.16).
+
+## Params/validation/ack doc cluster @0x9280xx:
+,
+rejected when empty after trimming, delivered trimmed with multibyte
+content byte-for-byte intact (SS3.16).Params for `subagent/sendMessage` and `subagent/followupTask` (SS3.16):
+a child target plus the input body.A fresh turn began running; `turnId` names its new run stream.The submit was admitte
+subagent/sendMessage` and `subagent/followupTask` (SS3.16):
+a child target plus the input body.A fresh turn began running; `turnId` names its new run stream.The submit was admitted behind the running turn; `turnId` names the
+pre-minted stream that will carry it, never the running turn (SS3.1.4).The submit was folded into the running turn; `turnId` names that turn.The three admission dispositions a `turn/start` ack reports (`tdd.md`
+SS3.2). Wire-open: a fourth admission mode must be additive, and a client
+that does not recognize a value can still hold the entry as "acked, not
+otherwise classified" rather than inventing a terminal.The `commandId` the client submitted, echoed back.How the command was admitted.The turn this submit names: the fresh run for `started`, the
+pre-minted stream for `queued`, the running turn for `steered`. For a
+plain queued submit this equals `commandId` (SS3.1.4, #21243).turnIdWhether this ack minted a new turn — `disposition == "started"`.startedNewTurnThe admission classification (SS3.2).dispositionThe `turn/start` result (`tdd.md` SS3.2): the ack a submit — or an
+SS3.1.1 same-`commandId` replay, which is value-identical — receives.
+
+Every member is required: the host emits all five on every ack, so an
+optional member would describe a reply it never sends. The ids are opaque
+strings by protocol rule (SS3.1.4, SS4.1).Snapshot schema version. A cl

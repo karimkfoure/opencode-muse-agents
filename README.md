@@ -74,4 +74,11 @@ Bundle, Muse Code, and schema-fingerprint pins live in `docs/VERSIONS.md`. A new
 
 ## Provenance
 
-Design is ported from reverse-engineering evidence: method and confidence map in `docs/RE-OVERVIEW.md`, full teardown at <https://github.com/karimkfoure/muse-code-teardown>.
+Design is ported from reverse-engineering evidence: method and confidence map in `docs/RE-OVERVIEW.md`, full teardown in `research/` (entry `research/README.md`). Historical source: <https://github.com/karimkfoure/muse-code-teardown>.
+
+## Research
+
+Everything under `research/` is the Muse Code teardown that produced this design.
+Start at `research/README.md` for the map (tracks, artifacts, Ghidra pointers).
+Big binaries and analysis state are git-ignored and regenerable via package tools.
+`research/` never ships in npm and never affects tests.

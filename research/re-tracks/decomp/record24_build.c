@@ -1,0 +1,85 @@
+
+void record24_build(byte *param_1,undefined1 *param_2)
+
+{
+  undefined1 uVar1;
+  byte bVar2;
+  undefined1 uVar3;
+  byte bVar4;
+  byte bVar5;
+  
+  uVar1 = (&UNK_00220210)[*param_1 & 0xf];
+  bVar2 = param_1[1];
+  *param_2 = (&UNK_00220210)[*param_1 >> 4];
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[1] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[2];
+  param_2[2] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[3] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[3];
+  param_2[4] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[5] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[4];
+  param_2[6] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[7] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[5];
+  param_2[8] = 0x2d;
+  param_2[9] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[10] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[6];
+  param_2[0xb] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[0xc] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[7];
+  param_2[0xd] = 0x2d;
+  param_2[0xe] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[0xf] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[8];
+  param_2[0x10] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 >> 4];
+  param_2[0x11] = uVar1;
+  uVar1 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar2 = param_1[0xe];
+  param_2[0x12] = 0x2d;
+  param_2[0x13] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar2 & 0xf];
+  bVar4 = param_1[9];
+  param_2[0x14] = uVar1;
+  param_2[0x15] = (&UNK_00220210)[bVar4 >> 4];
+  bVar5 = param_1[10];
+  param_2[0x16] = (&UNK_00220210)[bVar4 & 0xf];
+  uVar1 = (&UNK_00220210)[bVar5 >> 4];
+  param_2[0x17] = 0x2d;
+  param_2[0x18] = uVar1;
+  bVar4 = param_1[0xb];
+  param_2[0x19] = (&UNK_00220210)[bVar5 & 0xf];
+  param_2[0x1a] = (&UNK_00220210)[bVar4 >> 4];
+  bVar5 = param_1[0xc];
+  param_2[0x1b] = (&UNK_00220210)[bVar4 & 0xf];
+  param_2[0x1c] = (&UNK_00220210)[bVar5 >> 4];
+  bVar4 = param_1[0xd];
+  param_2[0x1d] = (&UNK_00220210)[bVar5 & 0xf];
+  param_2[0x1e] = (&UNK_00220210)[bVar4 >> 4];
+  param_2[0x1f] = (&UNK_00220210)[bVar4 & 0xf];
+  bVar4 = param_1[0xf];
+  param_2[0x20] = (&UNK_00220210)[bVar2 >> 4];
+  uVar1 = (&UNK_00220210)[bVar4 >> 4];
+  param_2[0x21] = uVar3;
+  uVar3 = (&UNK_00220210)[bVar4 & 0xf];
+  param_2[0x22] = uVar1;
+  param_2[0x23] = uVar3;
+  return;
+}
+

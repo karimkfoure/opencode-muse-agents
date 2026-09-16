@@ -3,3 +3,15 @@ dist/
 *.log
 .DS_Store
 .spark/
+.muse/
+research/artifacts/bin/all-platforms/*.bin
+research/artifacts/bin/all-platforms/*.exe
+research/artifacts/bin/all-platforms/*.pkg
+research/artifacts/muse-bin-*
+research/ghidra/*.rep/
+research/ghidra/*.lock*
+.opencode/*
+!.opencode/skills/
+.opencode/skills/*
+!.opencode/skills/ghidra-rpc/
+!.opencode/skills/ghidra-rpc/**
