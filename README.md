@@ -36,10 +36,33 @@ scripts/merge-fragment.sh ./opencode.json
 
 Retry rule: same `commandId` to reconcile, never a new one. Workers never redelegate.
 
+Coordinator loop:
+
+```mermaid
+flowchart TD
+    Plan["spark-plan decomposes goal"]
+    Submit["spark_submit admits spawn"]
+    Fanout["task fan-out runs workers"]
+    Send["spark_send steers by notes"]
+    Worker["spark-worker executes unit"]
+    Result["spark_result validates envelope"]
+    Review["spark-reviewer gates result"]
+    Integrate["integrate accepted work"]
+    Plan --> Submit
+    Submit --> Fanout
+    Fanout --> Worker
+    Send --> Worker
+    Worker --> Result
+    Result --> Review
+    Review -->|"accepted"| Integrate
+    Review -->|"rejected retry same commandId"| Submit
+```
+
 ## How it works
 
 Spawns commit validated records before anything runs; capacity and lineage gate admission; messages append to a ledger then admit through policy; results return as bounded envelopes folded into the parent.
 Full design in `docs/OVERVIEW.md`.
+Diagrams in `docs/ARCHITECTURE.md`.
 
 ## Tools
 
@@ -73,6 +96,19 @@ bun install && bun test && bun run build
 Bundle, Muse Code, and schema-fingerprint pins live in `docs/VERSIONS.md`. A new Muse Code release re-runs the harvest; any fingerprint or vocabulary delta opens a bundle patch before a new row is added.
 
 ## Provenance
+
+```mermaid
+flowchart LR
+    Binary["Muse Code binary"]
+    Tracks["RE tracks"]
+    Src["src modules"]
+    Bundle["bundle tools"]
+    Runtime["OpenCode runtime"]
+    Binary --> Tracks
+    Tracks --> Src
+    Src --> Bundle
+    Bundle --> Runtime
+```
 
 Design is ported from reverse-engineering evidence: method and confidence map in `docs/RE-OVERVIEW.md`, full teardown in `research/` (entry `research/README.md`). Historical source: <https://github.com/karimkfoure/muse-code-teardown>.
 
