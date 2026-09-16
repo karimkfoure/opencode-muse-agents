@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# muse-fetch: poll the release channel, download all artifacts, verify sha256.
+# Usage: tools/muse-fetch [OUT_DIR]  (default: ./artifacts/upstream)
+set -euo pipefail
+OUT="${1:-./artifacts/upstream}"
+CHANNEL="${MUSE_CHANNEL_URL:-https://api.meta.ai/muse-code/channels/muse-stable}"
+mkdir -p -- "$OUT"
+curl -fsSL "$CHANNEL" -o "$OUT/channel.json"
+VERSION="$(python3 -c "import json;print(json.load(open('$OUT/channel.json'))['version'])")"
+MANIFEST_URL="$(python3 -c "import json;print(json.load(open('$OUT/channel.json'))['manifest_url'])")"
+curl -fsSL "$MANIFEST_URL" -o "$OUT/manifest-$VERSION.json"
+python3 - "$OUT/manifest-$VERSION.json" "$OUT" <<'PY'
+import json, sys, urllib.request, hashlib, os
+man_path, out = sys.argv[1], sys.argv[2]
+man = json.load(open(man_path))
+for name, art in man["artifacts"].items():
+    ext = ".pkg" if name == "universal_macos_pkg" else (".exe" if "windows" in name else ".bin")
+    dest = os.path.join(out, f"{name}-{man['version']}{ext}")
+    if os.path.exists(dest) and os.path.getsize(dest) == art["size"]:
+        print(f"SKIP {name} (size ok)")
+        continue
+    print(f"GET {name} ({art['size']} bytes)")
+    urllib.request.urlretrieve(art["url"], dest)
+    h = hashlib.sha256(open(dest, "rb").read()).hexdigest()
+    assert h == art["checksum"], f"checksum mismatch for {name}"
+    assert os.path.getsize(dest) == art["size"], f"size mismatch for {name}"
+    print(f"OK {name}")
+PY
+echo "VERSION=$VERSION"

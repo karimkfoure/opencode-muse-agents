@@ -1,0 +1,22 @@
+{
+  "admitted": true,
+  "status": "accepted",
+  "commandId": "01900000-0000-7000-8000-000000000000",
+  "commit": {
+    "schema_version": 1,
+    "spawn_decision": "accepted",
+    "parent_binding": "01900000-0000-7000-8000-000000000002/01900000-0000-7000-8000-000000000004",
+    "agent_lineage_admission": "spark-worker",
+    "accepted": "accepted",
+    "description": "answer the question with evidence"
+  },
+  "child": {
+    "subagentId": "01900000-0000-7000-8000-000000000000",
+    "agentPath": "spark-worker",
+    "depth": 0,
+    "objective": "answer the question with evidence",
+    "childSessionId": "01900000-0000-7000-8000-000000000003",
+    "controlStatus": "accepted",
+    "workflowRunId": "01900000-0000-7000-8000-000000000004"
+  }
+}

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# muse-diff: diff two versions (old vs new harvest/schema/function notes).
+# Usage: tools/muse-diff <OLD_HARVEST> <NEW_HARVEST> [OLD_FP] [NEW_FP]
+set -euo pipefail
+OLD="$1"; NEW="$2"
+echo "### only-in-old (removed vocabulary — port may need deprecation)"
+comm -23 "$OLD" "$NEW" | head -n 50
+echo "### only-in-new (added vocabulary — port may need new rules)"
+comm -13 "$OLD" "$NEW" | head -n 50
+if [ $# -ge 4 ]; then
+  echo "### fingerprints: old=$3 new=$4"
+  [ "$3" = "$4" ] && echo "schema unchanged" || echo "SCHEMA CHANGED — bundle patch required"
+fi

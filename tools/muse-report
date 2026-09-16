@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# muse-report: compose a port-changelog entry from treadmill outputs.
+# Usage: tools/muse-report <MUSE_VERSION> <FINGERPRINT> <DIFF_SUMMARY_FILE>
+set -euo pipefail
+VERSION="$1"; FP="$2"; DIFF="$3"
+{
+  echo "## muse $VERSION ($FP)"
+  echo
+  cat "$DIFF"
+  echo
+  echo "Checklist: [ ] new policy value  [ ] new error key  [ ] new record field"
+  echo "  [ ] VERSIONS.md row  [ ] tests updated  [ ] schema/ pin added"
+} 

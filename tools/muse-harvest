@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# muse-harvest: strings sweep with the fixed orchestration keyword set.
+# Usage: tools/muse-harvest <BINARY> [OUT_FILE]
+# Output: sorted-unique matching lines for diffing across versions.
+set -euo pipefail
+BIN="$1"
+OUT="${2:-harvest.txt}"
+strings -n 8 "$BIN" | grep -E "subagent|SubagentResult|session\.fork|workflow\.v2|worktree|approval-judge|session_message|mailbox|turn/started|Agent\.start|ParallelGroup|queue_next_turn|wake_when_idle|fanout_limit|fan-out limit|AgentSpawn|SessionWorktree|WorkflowApiV2|PermissionCatalog|ApprovalReview|NativeResult|intake|registry|fingerprint|command_id|lease_generation|compaction|effort|ultra|downshift|hook" | sort -u > "$OUT"
+wc -l "$OUT"

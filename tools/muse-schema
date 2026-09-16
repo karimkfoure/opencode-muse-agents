@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# muse-schema: export pinned MSP schemas from a local muse binary (offline).
+# Usage: tools/muse-schema [MUSE_BIN] [OUT_DIR]
+set -euo pipefail
+BIN="${1:-muse}"
+OUT="${2:-./schema}"
+export MUSE_NO_AUTO_UPDATE=1
+"$BIN" schema generate-json-schema --out "$OUT/stable"
+"$BIN" schema generate-json-schema --out "$OUT/experimental" --experimental
+python3 - "$OUT" <<'PY'
+import json, sys
+out = sys.argv[1]
+for surf in ("stable", "experimental"):
+    m = json.load(open(f"{out}/{surf}/manifest.json"))
+    print(f"{surf}: fingerprint={m['fingerprint']}")
+PY

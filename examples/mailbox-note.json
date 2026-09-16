@@ -1,0 +1,10 @@
+{
+  "messageId": "01900000-0000-7000-8000-000000000001",
+  "sessionId": "01900000-0000-7000-8000-000000000002",
+  "subagentId": "01900000-0000-7000-8000-000000000003",
+  "body": "Narrow the search to the auth module and report file paths only.",
+  "deliveryPolicy": "queue_next_turn",
+  "wakePolicy": "wake_when_idle",
+  "admitted": "pending_admission",
+  "at": "2026-09-16T00:00:00.000Z"
+}

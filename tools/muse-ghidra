@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# muse-ghidra: bootstrap an isolated ghidra-rpc project and load a binary.
+# Seeds are STRINGS, never addresses: re-derive per version with
+# fileoff -> vaddr = fileoff + image_base (.rodata math per binary).
+# Usage: tools/muse-ghidra <PROJECT.gpr> <BINARY> [--analyze-timeout SECS]
+set -euo pipefail
+PROJECT="$1"
+BINARY="$2"
+: "${GHIDRA_INSTALL_DIR:=/opt/ghidra_12.1.3_PUBLIC}"
+export GHIDRA_INSTALL_DIR
+if [ "${3:-}" = "--analyze-timeout" ]; then
+  ghidra-rpc load "$BINARY" --project "$PROJECT" --analysis-timeout "$4"
+else
+  ghidra-rpc load "$BINARY" --project "$PROJECT" --no-analyze
+fi
+ghidra-rpc metadata "$(basename "$BINARY")" --project "$PROJECT"

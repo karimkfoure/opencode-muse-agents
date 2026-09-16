@@ -1,0 +1,6 @@
+{
+  "summary": "Auth lives in src/auth/{login,session}.ts; session creation in create().",
+  "artifactRefs": ["src/auth/login.ts", "src/auth/session.ts"],
+  "evidenceRefs": ["runs/demo-001/result.json"],
+  "text": "login.ts owns the token flow; session.ts owns create(). No other writers found."
+}
