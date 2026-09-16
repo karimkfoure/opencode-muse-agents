@@ -1,12 +1,11 @@
 # opencode-muse-agents
 
-Muse Code-grade subagent coordination for OpenCode: durable children, ledger mailbox, admission control, bounded results.
+Run subagents that survive crashes, respect capacity, and return results you can trust. This plugin ports Muse Code's coordination core to OpenCode: every spawn, steer, message, and verdict is a validated ledger record, not a live-session hope.
 
-Guarantees:
-
-- Durable by default: spawns commit through admission gates with idempotent command ids; verdicts only count when read back from the ledger.
-- Fail-closed communication: mailbox, intake, and registry reject bad input with keyed errors instead of guessing.
-- Bounded results: worker envelopes enforce summary and text caps plus required refs; over-cap input is rejected, never truncated.
+- Durable children: each worker is a committed record with lineage, worktree, and completion contract; lifecycle runs through 8 control statuses (`src/child.ts: CONTROL_STATUS`).
+- Ledger mailbox: messages append first, then admit; delivery uses a closed set of 9 policies (`src/mailbox.ts: DELIVERY_POLICIES`); unknown combos fail closed.
+- Admission control: spawns pass resolve, capacity, and depth gates mapped from 12 Agent RPC verbs (`src/verbs.ts: AGENT_VERBS`); rejections are keyed errors, never prose.
+- Bounded results: worker envelopes cap summary at 512 chars and text at 32 KiB (`src/envelope.ts: SUMMARY_MAX_CHARS`, `RESULT_TEXT_MAX_BYTES`); over-cap input is rejected, never truncated.
 
 ## Install
 
@@ -17,22 +16,30 @@ npm i opencode-muse-agents
 ```
 
 ```json
-{
-  "plugin": ["opencode-muse-agents"]
-}
+{ "plugin": ["opencode-muse-agents"] }
 ```
 
-Copy-install (no npm): copy `bundle/{agents,tools,plugins,skills,commands}` into `.opencode/` and merge `bundle/opencode.fragment.json` into `opencode.json` (see `bundle/README.md`; `scripts/merge-fragment.sh` automates the merge).
-
-## Quickstart
+Copy-install (no npm):
 
 ```sh
-bun install
-bun test
-bun run build
+cp -r bundle/agents bundle/tools bundle/plugins bundle/skills bundle/commands .opencode/
+scripts/merge-fragment.sh ./opencode.json
 ```
 
-Coordinator loop: `spark_submit` one worker with one objective, steer it with `spark_send` / `spark_steer`, collect it with `spark_result`. The `spark-coordinator` agent runs this loop; workers never redelegate.
+`scripts/merge-fragment.sh [TARGET]` deep-merges `bundle/opencode.fragment.json` (agents, `subagent_depth: 2`, skill permissions) into your `opencode.json`, backs up the target first, and is a no-op on re-run. Details in `bundle/README.md`.
+
+## Quickstart (60 seconds)
+
+1. `/spark-plan <goal>` — decompose into worker-sized units with inputs, worktree, budget, and evidence.
+2. `/spark-start` — coordinator admits each worker via `spark_submit`, fans out, steers by mailbox notes only.
+3. `/spark-review <output>` — reviewer gates every result; integrate only accepted work in your session.
+
+Retry rule: same `commandId` to reconcile, never a new one. Workers never redelegate.
+
+## How it works
+
+Spawns commit validated records before anything runs; capacity and lineage gate admission; messages append to a ledger then admit through policy; results return as bounded envelopes folded into the parent.
+Full design in `docs/OVERVIEW.md`.
 
 ## Tools
 
@@ -68,7 +75,3 @@ Bundle, Muse Code, and schema-fingerprint pins live in `docs/VERSIONS.md`. A new
 ## Provenance
 
 Design is ported from reverse-engineering evidence: method and confidence map in `docs/RE-OVERVIEW.md`, full teardown at <https://github.com/karimkfoure/muse-code-teardown>.
-
-## License
-
-No LICENSE file is shipped, by explicit decision. No `m8` artifact is included either.
